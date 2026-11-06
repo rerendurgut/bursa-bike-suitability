@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QGIS Bicycle Suitability Analysis - Bursa</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts: Inter and Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Progress Indicator Bar -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- Main Presentation Container -->
+    <main id="presentation-container">
+        
+        <!-- SLIDE 1: TITLE SLIDE -->
+        <section class="slide active" id="slide-1" data-slide-index="1">
+            <div class="slide-content title-slide">
+                <div class="title-decor"></div>
+                <div class="header-container">
+                    <img src="images/page_1_img_1.png" alt="BME Logo" class="bme-logo">
+                    <div class="institution">
+                        <h3>Budapest University of Technology and Economics</h3>
+                        <p>Faculty of Transportation Engineering and Vehicle Engineering</p>
+                        <p>Department of Transport Technology and Economics</p>
+                    </div>
+                </div>
+                
+                <h1 class="main-title">Bicycle Suitability Analysis of Bursa’s Road Network</h1>
+                <p class="main-subtitle">Evaluating Topographic Feasibility by Integrating OSM Vector Data and SRTM DEM</p>
+                
+                <div class="meta-container">
+                    <div class="meta-item">
+                        <span class="label">Course</span>
+                        <span class="value">Intelligent Transportation Systems</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Submitted by</span>
+                        <span class="value">Recep Eren Durgut (C1FYSH)</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Lecturer</span>
+                        <span class="value">Dr. Tamás Soltész</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Date</span>
+                        <span class="value">15th May 2026</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide Speaker Notes -->
+            <div class="speaker-notes-content" hidden>
+                Hello everyone. My name is Recep Eren Durgut, and today I will present my GIS analysis on the spatial and topographic suitability of Bursa’s road network for bicycle transportation. This work was completed for the Intelligent Transportation Systems course at BME. In this project, we integrated OpenStreetMap vector data with digital elevation models to evaluate how slope gradients affect bike-ability across the city, aiming to support sustainable urban planning.
+            </div>
+        </section>
+
+        <!-- SLIDE 2: EXECUTIVE SUMMARY -->
+        <section class="slide" id="slide-2" data-slide-index="2">
+            <div class="slide-content">
+                <h2 class="slide-title">Executive Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="card-icon">🎯</div>
+                        <h3>Project Goal</h3>
+                        <p>Evaluate the topographic suitability of Bursa's urban road network for bicycle transit to support micro-mobility networks.</p>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon">⚡</div>
+                        <h3>Methodology</h3>
+                        <p>Integrate 2D OpenStreetMap (OSM) vector data with 3D Shuttle Radar Topography Mission (SRTM) DEM to extract longitudinal gradients.</p>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="card-icon">📈</div>
+                        <h3>Key Outcomes</h3>
+                        <p>Identify critical cycling-friendly zones (e.g., Nilüfer) and isolate steep segments (e.g., Uludağ foothills) needing infrastructure intervention.</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-quote">
+                    <p>"By calculating precise slopes for every single road segment in Bursa, we establish a data-driven model for municipal bicycle network expansions."</p>
+                </div>
+            </div>
+            
+            <div class="speaker-notes-content" hidden>
+                To give you an executive summary: our primary objective was to assess how Bursa's hilly terrain impacts cycling feasibility. By combining planimetric road networks with elevation models, we computed the precise gradient of every road segment. This dataset enables planners to make informed, data-driven decisions—such as choosing locations for bike-sharing stations, identifying steep slopes where electric-assist bikes are needed, and filtering out routes that are legally or physically inaccessible to cyclists.
+            </div>
+        </section>
+
+        <!-- SLIDE 3: DATA ACQUISITION & PROCESSING -->
+        <section class="slide" id="slide-3" data-slide-index="3">
+            <div class="slide-content data-slide">
+                <h2 class="slide-title">Data Acquisition & Processing</h2>
+                <div class="two-col-layout">
+                    <div class="left-col">
+                        <div class="info-group">
+                            <span class="badge">Vector Data</span>
+                            <h3>OSM Highway Networks</h3>
+                            <p>Extracted Bursa's administrative road boundary using the <strong>QuickOSM</strong> plugin. Preserved crucial attributes like unique Feature IDs (<code>fid</code>), names, and highway classes.</p>
+                        </div>
+                        
+                        <div class="info-group">
+                            <span class="badge">Raster Data</span>
+                            <h3>Digital Elevation Model (DEM)</h3>
+                            <p>Acquired vertical topography grid using the <strong>SRTM Downloader</strong> plugin in QGIS, supplying elevation reference points (Z-coordinates).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="right-col">
+                        <div class="image-gallery-grid">
+                            <div class="image-container-wrapper" data-caption="Figure 1: QuickOSM Output Map">
+                                <span class="zoom-indicator">🔍 Click to zoom</span>
+                                <img src="images/page_2_img_2.png" alt="QuickOSM Output Map" class="lightbox-trigger">
+                                <div class="image-caption">Fig 1: QuickOSM Road Network</div>
+                            </div>
+                            
+                            <div class="double-image-row">
+                                <div class="image-container-wrapper" data-caption="Figure 2: SRTM-Downloader Extension UI">
+                                    <span class="zoom-indicator">🔍</span>
+                                    <img src="images/page_3_img_1.png" alt="SRTM-Downloader UI" class="lightbox-trigger">
+                                    <div class="image-caption">Fig 2: SRTM Download</div>
+                                </div>
+                                <div class="image-container-wrapper" data-caption="Figure 3: DEM Output">
+                                    <span class="zoom-indicator">🔍</span>
+                                    <img src="images/page_3_img_2.png" alt="DEM Output" class="lightbox-trigger">
+                                    <div class="image-caption">Fig 3: Topography DEM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="speaker-notes-content" hidden>
+                Our data acquisition relied on two primary sources. First, we extracted the road network vector data using the QGIS QuickOSM plugin, filtering for highways within Bursa. Key attributes like Feature ID, street names, and highway classes were preserved. Second, we obtained vertical elevation data using the SRTM Downloader extension. This gave us a high-resolution Digital Elevation Model raster grid, which serves as our elevation baseline to compute slopes.
+            </div>
+        </section>
+
+        <!-- SLIDE 4: TECHNICAL METHODOLOGY -->
+        <section class="slide" id="slide-4" data-slide-index="4">
+            <div class="slide-content">
+                <h2 class="slide-title">Spatial Analysis Workflow</h2>
+                <div class="two-col-layout">
+                    <div class="left-col">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-number">01</div>
+                                <div class="timeline-content">
+                                    <h3>Geometric Discretization</h3>
+                                    <p>Used <strong>Extract Vertices</strong> to split road lines into coordinate nodes. Essential because elevation shifts dynamically across a single road segment.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-number">02</div>
+                                <div class="timeline-content">
+                                    <h3>Point Elevation Sampling</h3>
+                                    <p>Assigned absolute elevation (Z-values) to each node using the <strong>Sample Raster Values</strong> tool against our DEM raster.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="timeline-item">
+                                <div class="timeline-number">03</div>
+                                <div class="timeline-content">
+                                    <h3>Statistical Aggregation</h3>
+                                    <p>Aggregated points back to lines using <strong>Statistics by Categories</strong>, grouping by <code>fid</code> to extract the minimum (<code>min_z</code>) and maximum (<code>max_z</code>) height for each road.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-col vertical-center">
+                        <div class="image-container-wrapper" data-caption="Figure 4: Statistics Output File UI">
+                            <span class="zoom-indicator">🔍 Click to zoom</span>
+                            <img src="images/page_4_img_1.png" alt="Statistics Output UI" class="lightbox-trigger">
+                            <div class="image-caption">Figure 4: Statistics Output File UI (Min & Max Z per segment)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="speaker-notes-content" hidden>
+                The technical methodology follows a three-phase workflow to solve the challenge of varying elevation. In Phase One, we discretized the road lines into individual vertices because a single road segment can go up and down. In Phase Two, we sampled the raster elevation values at each of these points to attach Z-values. In Phase Three, we aggregated these points back to their parent segments using the 'Statistics by Categories' tool, calculating the minimum and maximum elevation for each road segment.
+            </div>
+        </section>
+
+        <!-- SLIDE 5: ENGINEERING CALCULATIONS -->
+        <section class="slide" id="slide-5" data-slide-index="5">
+            <div class="slide-content">
+                <h2 class="slide-title">Engineering Calculations & Expressions</h2>
+                <div class="two-col-layout">
+                    <div class="left-col">
+                        <div class="formula-box">
+                            <span class="formula-tag">Slope Calculation Formula</span>
+                            <div class="formula-math">
+                                \text{Slope (\%)} = \left( \frac{\text{max\_z} - \text{min\_z}}{\text{Length}} \right) \times 100
+                            </div>
+                        </div>
+                        
+                        <div class="details-list">
+                            <div class="detail-item">
+                                <strong>Planimetric Distance:</strong> Derived dynamically using the QGIS geometry function <code>$length</code>.
+                            </div>
+                            <div class="detail-item">
+                                <strong>Logic:</strong> Calculates absolute vertical difference divided by horizontal run.
+                            </div>
+                            <div class="detail-item">
+                                <strong>Relational Join:</strong> Statistics output table was joined back to the main spatial layer using the <code>fid</code> attribute to enable visualization.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-col vertical-center">
+                        <div class="image-container-wrapper" data-caption="Figure 5: Field Calculator Area">
+                            <span class="zoom-indicator">🔍 Click to zoom</span>
+                            <img src="images/page_5_img_1.png" alt="Field Calculator Area" class="lightbox-trigger">
+                            <div class="image-caption">Figure 5: Field Calculator Slope Expression in QGIS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="speaker-notes-content" hidden>
+                With the min and max elevations joined back to our road network by Feature ID, we calculated the longitudinal slope using QGIS Field Calculator. The formula represents the vertical rise over the planimetric horizontal run, multiplied by 100 to get a percentage. QGIS's native length function provided the planimetric distance. This allowed us to write a direct attribute equation to classify the entire city’s roads.
+            </div>
+        </section>
+
+        <!-- SLIDE 6: CHALLENGES & SOLUTIONS -->
+        <section class="slide" id="slide-6" data-slide-index="6">
+            <div class="slide-content">
+                <h2 class="slide-title">Challenges Encountered & Solutions</h2>
+                <div class="two-col-layout">
+                    <div class="left-col">
+                        <div class="challenge-stack">
+                            <div class="challenge-item">
+                                <div class="challenge-header">
+                                    <span class="status-badge alert">Problem 1</span>
+                                    <h4>Parser Errors & Incompatibilities</h4>
+                                </div>
+                                <p><strong>Detail:</strong> Native geometric query expressions like <code>max_z($geometry)</code> failed due to internal QGIS parser errors.</p>
+                                <p><strong>Workaround:</strong> Engineered the 3-step pipeline (Extract Vertices &rarr; Sample Raster &rarr; Statistics by Categories) to manually sample values.</p>
+                            </div>
+                            
+                            <div class="challenge-item">
+                                <div class="challenge-header">
+                                    <span class="status-badge warn">Problem 2</span>
+                                    <h4>Processing Lag (Performance)</h4>
+                                </div>
+                                <p><strong>Detail:</strong> Dense vertex points caused processing tools to stall at 50% completion.</p>
+                                <p><strong>Workaround:</strong> Resampled lines into points along geometry at a fixed 100m interval, reducing data size by 80% while retaining statistical integrity.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-col">
+                        <div class="challenge-stack">
+                            <div class="challenge-item">
+                                <div class="challenge-header">
+                                    <span class="status-badge info">Problem 3</span>
+                                    <h4>Highway & Motorway Noise</h4>
+                                </div>
+                                <p><strong>Detail:</strong> Slopes on highways are mathematically flat (green) but physically and legally closed to cyclists, distorting suitability mapping.</p>
+                                <p><strong>Workaround:</strong> Built rule-based styling filters to exclude <code>motorway</code>, <code>trunk</code>, and <code>primary</code> classes from the cycling map.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="image-container-wrapper" data-caption="Figure 6: Rule Settings in QGIS UI">
+                            <span class="zoom-indicator">🔍 Click to zoom</span>
+                            <img src="images/page_6_img_1.png" alt="Rule settings UI" class="lightbox-trigger">
+                            <div class="image-caption">Figure 6: Rule-Based Styling Setup in QGIS UI</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="speaker-notes-content" hidden>
+                During execution, we faced three main challenges. First, parser limitations prevented us from doing direct geometric queries. We resolved this through our three-step vertex-extraction workaround. Second, the massive dataset caused processing lags. We optimized this by generating points along geometries at a fixed 100-meter interval, reducing the calculations by 80%. Third, high-speed motorways skew cycling maps, so we applied rule-based filters to exclude trunks and motorways from the cycle network.
+            </div>
+        </section>
+
+        <!-- SLIDE 7: CLASSIFICATION STANDARDS -->
+        <section class="slide" id="slide-7" data-slide-index="7">
+            <div class="slide-content">
+                <h2 class="slide-title">Bicycle Suitability Classification</h2>
+                <div class="two-col-layout">
+                    <div class="left-col">
+                        <table class="suitability-table">
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Slope Range</th>
+                                    <th>User Experience</th>
+                                    <th>Color</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="level-a">
+                                    <td><strong>Level A</strong> (Ideal)</td>
+                                    <td>0% - 2%</td>
+                                    <td>Effortless; suitable for all ages & commutes.</td>
+                                    <td><span class="color-dot green"></span> Green</td>
+                                </tr>
+                                <tr class="level-b">
+                                    <td><strong>Level B</strong> (Moderate)</td>
+                                    <td>2% - 5%</td>
+                                    <td>Requires average fitness; minor exertion.</td>
+                                    <td><span class="color-dot yellow"></span> Yellow</td>
+                                </tr>
+                                <tr class="level-c">
+                                    <td><strong>Level C</strong> (Challenging)</td>
+                                    <td>&gt; 5%</td>
+                                    <td>Steep; suitable for sports or electric bikes.</td>
+                                    <td><span class="color-dot red"></span> Red</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="findings-box">
+                            <h4>Geographic Findings:</h4>
+                            <ul>
+                                <li><strong>Nilüfer District (West):</strong> Flat landscape dominated by Level A roads. Primary candidate area for a bike-sharing network.</li>
+                                <li><strong>Uludağ Foothills (South):</strong> Gradients consistently exceed 8%. Demands specialized climbing lanes and e-bike infrastructure.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="right-col vertical-center">
+                        <div class="image-container-wrapper" data-caption="Figure 7: City Center Biking Evaluation">
+                            <span class="zoom-indicator">🔍 Click to zoom</span>
+                            <img src="images/page_7_img_1.png" alt="City Center Biking Evaluation" class="lightbox-trigger">
+                            <div class="image-caption">Figure 7: City Center Bicycle Suitability Classification Map</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="speaker-notes-content" hidden>
+                To evaluate suitability, we classified roads into three levels based on slope. Level A, from 0 to 2 percent slope, is colored green and represents effortless cycling. Level B is moderate, yellow, from 2 to 5 percent. Level C, red, is challenging with slopes over 5 percent. Geographically, our map shows that the western Nilüfer district is flat and highly suitable for standard bike-sharing. However, the southern areas near the Uludağ foothills average over 8 percent slopes, indicating that standard bikes won’t work there, and e-bikes or dedicated climbing routes are required.
+            </div>
+        </section>
+
+        <!-- SLIDE 8: CITY-WIDE EVALUATION & CONCLUSIONS -->
+        <section class="slide" id="slide-8" data-slide-index="8">
+            <div class="slide-content city-wide-slide">
+                <h2 class="slide-title">City-Wide Bicycle network Evaluation</h2>
+                <div class="two-col-layout">
+                    <div class="left-col-small">
+                        <div class="recommendations">
+                            <h3>Key Takeaways</h3>
+                            <div class="rec-card">
+                                <h5>1. Infrastructure Planning</h5>
+                                <p>Filter out high-speed arterial roads. Although they appear flat, they act as impassable barriers for cyclists.</p>
+                            </div>
+                            <div class="rec-card">
+                                <h5>2. Bike-Sharing Potential</h5>
+                                <p>Western Bursa (Nilüfer) has the highest viability for standard, affordable public bike systems.</p>
+                            </div>
+                            <div class="rec-card">
+                                <h5>3. E-Bike Integration</h5>
+                                <p>Southern Bursa zones require docked e-bikes to encourage cross-city commuting across Uludağ slopes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-col-large">
+                        <div class="slider-instructions">
+                            <span>↔️ Drag slider to compare: <strong>Left</strong> (Without Highways) vs <strong>Right</strong> (With Highways)</span>
+                        </div>
+                        
+                        <!-- Interactive Image Comparison Slider -->
+                        <div class="comparison-slider" id="suitability-comparison">
+                            <!-- Under Image (Base) - With Highways -->
+                            <img src="images/page_8_img_2.png" alt="With Highways" class="slider-image base-img">
+                            
+                            <!-- Over Image (Overlay) - Without Highways -->
+                            <div class="overlay-img-wrapper" id="slider-overlay">
+                                <img src="images/page_8_img_1.png" alt="Without Highways" class="slider-image overlay-img">
+                            </div>
+                            
+                            <!-- Slider Control Handle -->
+                            <div class="slider-handle" id="slider-handle">
+                                <div class="handle-line"></div>
+                                <div class="handle-button">↔</div>
+                                <div class="handle-line"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-captions">
+                            <span>Fig 8: Excluding Highways</span>
+                            <span>Fig 9: Including Highways (thick red)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="speaker-notes-content" hidden>
+                Finally, looking at the city-wide scale, we compared the bicycle network with and without high-speed arterials. This comparison is vital because while highways appear flat and green on slope maps, they act as physical barriers that slice through local neighborhoods. In conclusion, our analysis recommends a standard bike-share system for Nilüfer, electric-assist infrastructure for the steep southern corridors, and the creation of safe bypass paths around major arterial junctions to create a truly connected, sustainable bicycle network. Thank you.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Presentation Control HUD -->
+    <nav id="presentation-hud">
+        <div class="hud-left">
+            <span class="slide-counter">Slide 1 of 8</span>
+            <span class="hud-divider">|</span>
+            <span class="slide-mini-title">Bursa Bicycle Suitability</span>
+        </div>
+        
+        <div class="hud-center">
+            <button class="hud-btn" id="prev-btn" title="Previous Slide (Left Arrow / PageUp)">◀ Prev</button>
+            <div class="slide-dots" id="slide-dots">
+                <!-- Dots will be populated dynamically -->
+            </div>
+            <button class="hud-btn" id="next-btn" title="Next Slide (Right Arrow / Space / PageDown)">Next ▶</button>
+        </div>
+        
+        <div class="hud-right">
+            <button class="hud-btn icon-btn" id="notes-btn" title="Toggle Speaker Notes (N)">📋 Notes</button>
+            <button class="hud-btn icon-btn" id="theme-btn" title="Toggle Light/Dark Theme (T)">🌓 Theme</button>
+            <button class="hud-btn icon-btn" id="fullscreen-btn" title="Toggle Fullscreen (F)">📺 Fullscreen</button>
+            <button class="hud-btn icon-btn" id="help-btn" title="Keyboard Shortcuts (?)">⌨️ Help</button>
+        </div>
+    </nav>
+
+    <!-- Floating Speaker Notes Drawer -->
+    <div id="speaker-notes-drawer" class="hidden">
+        <div class="drawer-header">
+            <h4>🎤 Speaker Notes (Slide <span id="notes-slide-num">1</span>)</h4>
+            <div class="drawer-controls">
+                <button class="drawer-btn" id="notes-zoom-out" title="Decrease Font Size">A-</button>
+                <button class="drawer-btn" id="notes-zoom-in" title="Increase Font Size">A+</button>
+                <button class="drawer-btn close-btn" id="close-notes-btn">×</button>
+            </div>
+        </div>
+        <div class="drawer-body">
+            <p id="speaker-notes-text">Notes will go here.</p>
+        </div>
+        <div class="drawer-footer">
+            <span>Pro tip: Press <strong>N</strong> to toggle this panel. Adjust size with buttons.</span>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="image-lightbox" class="lightbox hidden">
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+        <div class="lightbox-content-wrapper">
+            <img id="lightbox-img" src="" alt="Zoomed View">
+            <p id="lightbox-caption">Caption</p>
+        </div>
+    </div>
+
+    <!-- Keyboard Help Modal -->
+    <div id="help-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Keyboard Shortcuts</h3>
+                <button class="close-btn" id="close-help-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <table class="shortcuts-table">
+                    <tr>
+                        <td><kbd>▶</kbd> / <kbd>Space</kbd> / <kbd>PgDn</kbd></td>
+                        <td>Next Slide</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>◀</kbd> / <kbd>Shift</kbd>+<kbd>Space</kbd> / <kbd>PgUp</kbd></td>
+                        <td>Previous Slide</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Home</kbd> / <kbd>End</kbd></td>
+                        <td>First / Last Slide</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>N</kbd></td>
+                        <td>Toggle Speaker Notes Panel</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>T</kbd></td>
+                        <td>Toggle Light / Dark Mode</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>F</kbd></td>
+                        <td>Toggle Fullscreen Mode</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>?</kbd></td>
+                        <td>Toggle Keyboard Shortcuts Guide</td>
+                    </tr>
+                    <tr>
+                        <td><kbd>Esc</kbd></td>
+                        <td>Close Lightbox or Modal</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="hud-btn" id="close-help-ok">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

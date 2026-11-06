@@ -1,0 +1,20 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Large Raw Rasters (>100MB)
+*.tif
+*.tiff
+bursa_dem.tif
+
+# QGIS Backup files
+*~
+*.qgz~
+*.qgs~

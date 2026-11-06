@@ -1,0 +1,130 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "rank": 1,
+        "cluster_a": 5,
+        "cluster_b": 8,
+        "hub_a": "Dikkaldırım Mahallesi",
+        "hub_b": "23 Nisan Mahallesi",
+        "flow_pax_day": 6062,
+        "mode_proposal": "Metrobüs / Ekspres BRT"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            29.014116249283557,
+            40.20859427696675
+          ],
+          [
+            28.945154579161056,
+            40.21598103149257
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "rank": 2,
+        "cluster_a": 18,
+        "cluster_b": 22,
+        "hub_a": "Görükle Mahallesi",
+        "hub_b": "Kurtuluş Mahallesi",
+        "flow_pax_day": 5956,
+        "mode_proposal": "Metrobüs / Ekspres BRT"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.865101322516402,
+            40.224113702187005
+          ],
+          [
+            29.190735112287868,
+            40.20784699235965
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "rank": 3,
+        "cluster_a": 1,
+        "cluster_b": 2,
+        "hub_a": "Osmangazi Mahallesi",
+        "hub_b": "Ulu Mahallesi",
+        "flow_pax_day": 5808,
+        "mode_proposal": "Metrobüs / Ekspres BRT"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            29.057962077282504,
+            40.1856437366575
+          ],
+          [
+            29.062703731094118,
+            40.19555785992549
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "rank": 4,
+        "cluster_a": 4,
+        "cluster_b": 16,
+        "hub_a": "Siteler Mahallesi",
+        "hub_b": "Yiğitler Mahallesi",
+        "flow_pax_day": 5158,
+        "mode_proposal": "Metrobüs / Ekspres BRT"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            29.12505476037538,
+            40.17869937302911
+          ],
+          [
+            29.156335271229025,
+            40.19202568338619
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "rank": 5,
+        "cluster_a": 4,
+        "cluster_b": 14,
+        "hub_a": "Siteler Mahallesi",
+        "hub_b": "Davutkadı Mahallesi",
+        "flow_pax_day": 4658,
+        "mode_proposal": "Metrobüs / Ekspres BRT"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            29.12505476037538,
+            40.17869937302911
+          ],
+          [
+            29.085990997373237,
+            40.181219114021125
+          ]
+        ]
+      }
+    }
+  ]
+}
